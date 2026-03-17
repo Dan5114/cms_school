@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CMS - School</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center py-10">
+    <div class="bg-white rounded-2xl shadow-lg w-full max-w-2xl p-8">
+        <h1 class="text-2xl font-bold text-gray-800 mb-6">CMS</h1>
+        <form method="post" enctype="multipart/form-data" class="space-y-5">
+            {% csrf_token %}
+
+            <div>
+                <label for="id_title" class="block text-sm font-medium text-gray-700 mb-1">Title</label>
+                <input type="text" name="title" id="id_title" maxlength="200" required
+                    class="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    {% if form.title.value %}value="{{ form.title.value }}"{% endif %}>
+                {% if form.title.errors %}
+                    <p class="text-red-500 text-xs mt-1">{{ form.title.errors|join:", " }}</p>
+                {% endif %}
+            </div>
+
+            <div>
+                <label for="id_image" class="block text-sm font-medium text-gray-700 mb-1">Image</label>
+                <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer hover:border-blue-400 transition"
+                    onclick="document.getElementById('id_image').click()">
+                    <svg class="mx-auto h-10 w-10 text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    <p class="text-sm text-gray-500" id="file-label">Click to upload or drag and drop</p>
+                    <input type="file" name="image" id="id_image" accept="image/*" class="hidden"
+                        onchange="document.getElementById('file-label').textContent = this.files[0]?.name || 'Click to upload or drag and drop'">
+                </div>
+                {% if form.image.errors %}
+                    <p class="text-red-500 text-xs mt-1">{{ form.image.errors|join:", " }}</p>
+                {% endif %}
+            </div>
+
+            <div>
+                <label for="id_author" class="block text-sm font-medium text-gray-700 mb-1">Author</label>
+                <input type="text" name="author" id="id_author" maxlength="100" required
+                    class="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    {% if form.author.value %}value="{{ form.author.value }}"{% endif %}>
+                {% if form.author.errors %}
+                    <p class="text-red-500 text-xs mt-1">{{ form.author.errors|join:", " }}</p>
+                {% endif %}
+            </div>
+
+            <div>
+                <label for="id_content" class="block text-sm font-medium text-gray-700 mb-1">Content</label>
+                <textarea name="content" id="id_content" rows="6" required
+                    class="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none">{% if form.content.value %}{{ form.content.value }}{% endif %}</textarea>
+                {% if form.content.errors %}
+                    <p class="text-red-500 text-xs mt-1">{{ form.content.errors|join:", " }}</p>
+                {% endif %}
+            </div>
+
+            <button type="submit"
+                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition">
+                Save Content
+            </button>
+        </form>
+    </div>
+</body>
+</html>
