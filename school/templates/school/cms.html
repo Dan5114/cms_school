@@ -6,15 +6,25 @@
     <title>CMS - School</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 min-h-screen flex items-center justify-center py-10">
+<body class="bg-gray-100 min-h-screen flex flex-col items-center justify-center py-10">
     <div class="bg-white rounded-2xl shadow-lg w-full max-w-2xl p-8">
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="mb-4 px-4 py-3 rounded-lg text-sm font-medium bg-green-100 text-green-800">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
         <h1 class="text-2xl font-bold text-gray-800 mb-6">CMS</h1>
         <form method="post" enctype="multipart/form-data" class="space-y-5">
             {% csrf_token %}
 
             <div>
-                <label for="id_title" class="block text-sm font-medium text-gray-700 mb-1">Title</label>
+                <label for="id_title" class="block text-sm font-medium text-gray-700 mb-1">Title <span class="text-red-500">*</span></label>
                 <input type="text" name="title" id="id_title" maxlength="200" required
+                    placeholder="Enter article title"
                     class="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400"
                     {% if form.title.value %}value="{{ form.title.value }}"{% endif %}>
                 {% if form.title.errors %}
@@ -40,8 +50,9 @@
             </div>
 
             <div>
-                <label for="id_author" class="block text-sm font-medium text-gray-700 mb-1">Author</label>
+                <label for="id_author" class="block text-sm font-medium text-gray-700 mb-1">Author <span class="text-red-500">*</span></label>
                 <input type="text" name="author" id="id_author" maxlength="100" required
+                    placeholder="Author name"
                     class="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400"
                     {% if form.author.value %}value="{{ form.author.value }}"{% endif %}>
                 {% if form.author.errors %}
@@ -50,8 +61,9 @@
             </div>
 
             <div>
-                <label for="id_content" class="block text-sm font-medium text-gray-700 mb-1">Content</label>
+                <label for="id_content" class="block text-sm font-medium text-gray-700 mb-1">Content <span class="text-red-500">*</span></label>
                 <textarea name="content" id="id_content" rows="6" required
+                    placeholder="Write your article content here..."
                     class="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none">{% if form.content.value %}{{ form.content.value }}{% endif %}</textarea>
                 {% if form.content.errors %}
                     <p class="text-red-500 text-xs mt-1">{{ form.content.errors|join:", " }}</p>
@@ -64,5 +76,29 @@
             </button>
         </form>
     </div>
+
+    {% if articles %}
+    <div class="bg-white rounded-2xl shadow-lg w-full max-w-2xl p-8 mt-8">
+        <h2 class="text-xl font-bold text-gray-800 mb-4">Saved Articles</h2>
+        <table class="w-full text-sm text-left text-gray-700">
+            <thead>
+                <tr class="border-b border-gray-200 text-gray-500 uppercase text-xs">
+                    <th class="py-2">Title</th>
+                    <th class="py-2">Author</th>
+                    <th class="py-2">Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for article in articles %}
+                <tr class="border-b border-gray-100">
+                    <td class="py-2">{{ article.title }}</td>
+                    <td class="py-2">{{ article.author }}</td>
+                    <td class="py-2">{{ article.created_at|date:"M d, Y" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
 </body>
 </html>
